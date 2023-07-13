@@ -17,8 +17,8 @@ FluidNavBar buildNav(MyHomePageState state){
   FluidNavBar bob = FluidNavBar(
     icons: [
       FluidNavBarIcon(icon: const IconData(0xf7f5, fontFamily: 'MaterialIcons')),
-      FluidNavBarIcon(icon: const IconData(0xeeae, fontFamily: 'MaterialIcons')),
       FluidNavBarIcon(icon: const IconData(0xf8f0, fontFamily: 'MaterialIcons')),
+      FluidNavBarIcon(icon: const IconData(0xeeae, fontFamily: 'MaterialIcons')),
       FluidNavBarIcon(icon: const IconData(0xf0127, fontFamily: 'MaterialIcons')),
     ],
     style: const FluidNavBarStyle(

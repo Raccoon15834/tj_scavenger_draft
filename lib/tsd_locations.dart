@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'tsd_pages.dart';
 
 class location{
   //the following are NEVER revealed to the user
@@ -15,76 +17,10 @@ class location{
   }
   location(this.longitude, this.latitude, this.altitudeLevel, this.roomNum, this.teacherName, this.purpose){
   }
-}//bedrooms are numbere 220-223
+}//bedrooms are numbered 220-223
 List<String> roomNumsList = ['kitchen', 'living room','220', '221','222','223'];
 
-
-// class mySearchDelegate extends SearchDelegate{
-//   @override
-//   List<Widget>? buildActions(BuildContext context) {
-//     return [
-//       IconButton(
-//         onPressed: () {
-//           query = '';
-//         },
-//         icon: Icon(Icons.clear),
-//       ),
-//     ];
-//   }
-//
-//   @override
-//   Widget? buildLeading(BuildContext context) {
-//     return IconButton(
-//       onPressed: () {
-//         close(context, null);
-//       },
-//       icon: Icon(Icons.arrow_back),
-//     );
-//   }
-//
-//   @override
-//   Widget buildResults(BuildContext context) {
-//     List<String> matchQuery = [];
-//     for (var num in roomNumsList) {
-//       if (num.toLowerCase().contains(query.toLowerCase())) {
-//         matchQuery.add(num);
-//       }
-//     }
-//     return ListView.builder(
-//       itemCount: matchQuery.length,
-//       itemBuilder: (context, index) {
-//         var result = matchQuery[index];
-//         return ListTile(
-//           title: Text(result),
-//           //onTap: openRoomDetailView(),
-//         );
-//       },
-//     );
-//   }
-//
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     List<String> matchQuery = [];
-//     for (var num in roomNumsList) {
-//       if (num.toLowerCase().contains(query.toLowerCase())) {
-//         matchQuery.add(num);
-//       }
-//     }
-//     return ListView.builder(
-//       itemCount: matchQuery.length,
-//       itemBuilder: (context, index) {
-//         var result = matchQuery[index];
-//         return ListTile(
-//           title: Text(result),
-//           //onTap: openRoomDetailView(),
-//         );
-//       },
-//     );
-//   }
-//
-// }
-
-Widget buildLocList(bool searchMode, String query){
+Widget buildLocList(bool searchMode, String query, HotColdState hcs){
   if (!searchMode) return Container();
   ListView mLW = ListView();
   if(query=='') {//if nothing return them all
@@ -94,7 +30,7 @@ Widget buildLocList(bool searchMode, String query){
         var result = roomNumsList[index];
         return ListTile(
           title: Text(result),
-          //onTap: openRoomDetailView(),
+          //onTap: changeDestination(result, hcs),
         );
       },
     );
@@ -111,7 +47,7 @@ Widget buildLocList(bool searchMode, String query){
         var result = matchQuery[index];
         return ListTile(
           title: Text(result),
-          //onTap: openRoomDetailView(),
+          //onTap: changeDestination(result, hcs),
         );
       },
     );
@@ -119,11 +55,27 @@ Widget buildLocList(bool searchMode, String query){
   return SizedBox(height: 300, child: mLW);
 }
 
-Widget buildTextBox(bool searchMode){
+changeDestination(String value, HotColdState hcs){
+  hcs.setState(() {
+    hcs.destination = 'Destination: '+value;
+  });
+}
+
+Widget buildTextBox(bool searchMode, HotColdState hcs){
   if (!searchMode) return Container();
-  return SizedBox(width: 200, child: TextField(cursorColor: Colors.green));
+  return SizedBox(width: 200, child: TextField(onChanged: (value)=> changeQuery(hcs, value)));
+}
+changeQuery(HotColdState hcs, String value){
+  hcs.setState(() {
+    hcs.query = value;
+  });
 }
 Widget whichIcon(bool searchMode){
   if(searchMode) return Icon(Icons.arrow_back);
   return Icon(Icons.search_rounded);
+}
+
+Widget buildLottie(bool searchMode){
+  if (!searchMode) return Lottie.asset('assets/108687-green-pinging.json');
+  return Container();
 }

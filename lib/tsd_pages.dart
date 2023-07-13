@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'tsd_locations.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:lottie/lottie.dart';
 
-//TODO: make updating outputs continuous
-//TODO: OUTPUTS, find room coord, print distance from place
-//TODO: change output to color (callibrate)
+
 //TODO: implement search bar functionality in encapsulating statless widget to be efficient
-  //TODO: in initState have it already in search mode - once selected, show lottie
+//TODO:  make the search bar dynamic
+//TODO: delete padding around lottie,
+
 //TODO: fonts, background image
+//TODO: make updating outputs continuous
+//TODO: OUTPUTS, change color of lottie (callibrate)
+//TODO: add textual directions on the where to page
 Container freshMode1(){
   return Container(
     width: double.infinity,
@@ -28,27 +30,27 @@ class freshModeHotCold extends StatefulWidget{
 class HotColdState extends State<freshModeHotCold> {
   String destination = 'Destination: homeroom';
   bool searchMode = false;
+  String query='';
 
 
-  customShowSearch(){
-    // setState(() {
-    // //   debugPrint('searchmode was '+searchMode.toString());
-    //   searchMode ? searchMode=false : searchMode=true;
-    // });
+  void customShowSearch(){
+    setState(() {
+      searchMode ? searchMode=false : searchMode=true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: ListView(
-      children: [Row(children:[IconButton(icon: whichIcon(searchMode), onPressed: customShowSearch(),), buildTextBox(searchMode)]),
-        Text(destination), buildLocList(searchMode, ''),
+    return Expanded( child: ListView(
+      children: [Row(children:[IconButton(icon: whichIcon(searchMode), onPressed: customShowSearch,),buildTextBox(searchMode, this)]),
+        Text(destination), buildLocList(searchMode, query, this),
         FutureBuilder(
           future: determinePosition(),
           initialData: 'loading data..',
             builder: (context, snapshot) {
               return Column(children: [Text('geolocation: ${snapshot.data}'), Text('distance: ')]);
             }),
-        Lottie.asset('assets/108687-green-pinging.json')
+        buildLottie(searchMode),
         ],
     ));
   }
@@ -77,7 +79,6 @@ Future<String> determinePosition() async {
         'Location permissions are permanently denied, we cannot request permissions.');
   }
   Position pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  debugPrint(pos.toJson().toString());
   return pos.toJson().toString();
 }
 

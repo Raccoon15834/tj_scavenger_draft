@@ -41,7 +41,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  int page=1; //will number pages 1-4
+  int page=0; //will number pages 1-4
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ Container buildPages(int page){
     case 1: return freshMode1(); break;
     case 2: return leaderboard2(); break;
     case 3: return clueboard3(); break;
-    default: return home0();
+    default: return home0(); //case 0
   }
   return Container();
 }
