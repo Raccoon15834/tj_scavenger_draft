@@ -67,8 +67,13 @@ flutter:
     - family: SourceCodePro
       fonts:
         - asset: assets/SourceCodePro-Regular.ttf
+    - family: ArtBrewery
+      fonts:
+        - asset: assets/ArtBrewery.ttf
   assets:
     - assets/108687-green-pinging.json
+    - assets/profile.png
+    - assets/profile.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'tsd_pages.dart';
 
-class location{
+class Location{
   //the following are NEVER revealed to the user
-  int? longitude;
-  int? latitude;
-  int? altitudeLevel;
+  double longitude=0;
+  double latitude=0;
+  double? altitudeLevel;
   //the following are searchable things
-  int? roomNum;
+  String? roomNum;
   String? teacherName; // teacher name
   List<String>? purpose; //bio lab, statistics, mobile-apps-club etc
   //in the future, have addable description user that can be used to search by (clubs, etc)
 
-  location.simple(this.longitude, this.latitude, this.altitudeLevel, this.roomNum){
+  Location.simple(this.latitude, this.longitude, this.altitudeLevel, this.roomNum){
   }
-  location(this.longitude, this.latitude, this.altitudeLevel, this.roomNum, this.teacherName, this.purpose){
+  Location.supersimple(this.roomNum);
+  Location(this.latitude, this.longitude, this.altitudeLevel, this.roomNum, this.teacherName, this.purpose){
   }
 }//bedrooms are numbered 220-223
 List<String> roomNumsList = ['kitchen', 'living room','220', '221','222','223'];
@@ -57,7 +58,7 @@ Widget buildLocList(bool searchMode, String query, HotColdState hcs){
 
 changeDestination(String value, HotColdState hcs){
   hcs.setState(() {
-    hcs.destination = 'Destination: '+value;
+    hcs.destination = Location.supersimple(value);
   });
 }
 
@@ -75,7 +76,20 @@ Widget whichIcon(bool searchMode){
   return Icon(Icons.search_rounded);
 }
 
-Widget buildLottie(bool searchMode){
-  if (!searchMode) return Lottie.asset('assets/108687-green-pinging.json');
+Widget buildLottie(bool searchMode, double distance){
+  double distanceCalibrate = distance/100;
+  if (distanceCalibrate>1) distanceCalibrate=1;
+  Color hotColdColor = Colors.black;
+  Color? lottieColor = Color.lerp(Colors.red, Colors.blue, distanceCalibrate);
+  lottieColor==null? hotColdColor=Colors.black: hotColdColor=lottieColor;
+
+  if (!searchMode) return Lottie.asset('assets/108687-green-pinging.json', delegates: LottieDelegates(
+    values: [ValueDelegate.color(["ellipes - 2", '**'], value: lottieColor),
+      ValueDelegate.color(["ellipes - 3", '**'], value: lottieColor),
+      ValueDelegate.color(["ellipes - 4", '**'], value: lottieColor),
+      ValueDelegate.color(["ellipes - 5", '**'], value: lottieColor),
+      ValueDelegate.color(["ellipes - 6", '**'], value: lottieColor),
+      ValueDelegate.color(["ellipes - 7", '**'], value: lottieColor)],
+  ));
   return Container();
 }

@@ -1,16 +1,15 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'tsd_locations.dart';
 import 'package:geolocator/geolocator.dart';
+import 'tsd_homepageinfo.dart';
 
 
-//TODO: implement search bar functionality in encapsulating statless widget to be efficient
-//TODO:  make the search bar dynamic
-//TODO: delete padding around lottie,
+//TODO: encapsulate search bar in statless widget to be efficient
+//TODO: delete padding around lottie,Change altitude to say 'floor', calibrate coloration (quadratic?)
 
-//TODO: fonts, background image
-//TODO: make updating outputs continuous
-//TODO: OUTPUTS, change color of lottie (callibrate)
-//TODO: add textual directions on the where to page
+//TODO: check geolocater package for platform-specific-settings AND ASK FOR PERMISSIONS
+//TODO: textual directions, sql database (sqflite)
 Container freshMode1(){
   return Container(
     width: double.infinity,
@@ -28,34 +27,60 @@ class freshModeHotCold extends StatefulWidget{
   State<freshModeHotCold> createState() => HotColdState();
 }
 class HotColdState extends State<freshModeHotCold> {
-  String destination = 'Destination: homeroom';
   bool searchMode = false;
   String query='';
+  String positionData = 'Loading...';
+  Location destination = Location.simple(38.8865184, -77.3913343, 82.9, 'homeroom');
+  String distanceToTargetText = 'Loading...';
+  double distance = 0.0;
+
+  @override
+  void initState() {
+    Stream<Position> positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings( accuracy: LocationAccuracy.high, distanceFilter: 1,));
+    positionStream.listen(
+        (Position? position) {
+          setState(() {
+            if(position==null){
+              positionData='Loading...';
+              distanceToTargetText='Loading...';
+            }
+            else{
+              positionData='${position.latitude.toString()}, ${position.longitude.toString()}, altitude: ${position.altitude.toString()}';
+              distance = Geolocator.distanceBetween(position.latitude, position.longitude, destination.latitude, destination.longitude);
+              distanceToTargetText = '${distance.toString()} m';
+
+            }
+          });
+        }
+    );}
 
 
-  void customShowSearch(){
-    setState(() {
-      searchMode ? searchMode=false : searchMode=true;
-    });
-  }
+
+  void customShowSearch(){//TODO, when get off page, delete position stream (or automatic with deletion of widget?)
+    debugPrint('search mode was $searchMode');
+    // if (positionStream!=null) {
+    //   searchMode ? positionStream?.pause() : positionStream?.resume();
+    // }
+      setState(() {
+        searchMode ? searchMode=false : searchMode=true;
+      });
+    }
+
 
   @override
   Widget build(BuildContext context) {
     return Expanded( child: ListView(
       children: [Row(children:[IconButton(icon: whichIcon(searchMode), onPressed: customShowSearch,),buildTextBox(searchMode, this)]),
-        Text(destination), buildLocList(searchMode, query, this),
-        FutureBuilder(
-          future: determinePosition(),
-          initialData: 'loading data..',
-            builder: (context, snapshot) {
-              return Column(children: [Text('geolocation: ${snapshot.data}'), Text('distance: ')]);
-            }),
-        buildLottie(searchMode),
+        Text('Destination: ${destination.roomNum}'), buildLocList(searchMode, query, this),
+        Text(positionData),
+        Text(distanceToTargetText),
+        buildLottie(searchMode, distance),
         ],
     ));
   }
 }
 
+//THIS METHOD IS NO LONGER USED, FOR REFERENCE WHEN ADDING BACK SETTINGS
 Future<String> determinePosition() async {
   bool serviceEnabled;
   LocationPermission permission;
@@ -82,10 +107,16 @@ Future<String> determinePosition() async {
   return pos.toJson().toString();
 }
 
-
-//start search immediately, in initState, or set to default like you are in____
-Container home0(){
-  return Container();
+Widget home0(){
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+    Expanded(flex: 1, child:
+      Stack( children: [//TODO: fix sizing of profile to be dynmaic to screen size (using row flex +empty container)
+        Container( padding: EdgeInsets.all(15), alignment: Alignment.topRight, child: Text('TJ Scavenger', style: TextStyle(fontFamily: 'Oswald', fontSize: 50)), color: Color(0xFF6F2E34)), //TODO: check rendering as png AND svg
+        Positioned(bottom: 0, child: Container(height: 100, width:100,  decoration: BoxDecoration(image: DecorationImage(image:AssetImage("assets/profile.png")),)),)
+      ],),),
+    Expanded(flex: 3, child: Container(child: MyInfosWidget()))],);
 }
 Container leaderboard2(){
   return Container();

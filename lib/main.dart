@@ -57,7 +57,7 @@ class MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Container buildPages(int page){
+Widget buildPages(int page){
   switch(page){
     case 1: return freshMode1(); break;
     case 2: return leaderboard2(); break;
