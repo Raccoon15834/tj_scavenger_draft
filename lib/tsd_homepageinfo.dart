@@ -32,7 +32,7 @@ class MyInfoWidgetState extends State<MyInfosWidget>{
     ]));
   }
 }
-//TODO: fix animation, add icons
+//TODO: fix animation (stack is not constrained error), add icons
 //TODO: make actual info pages,
 //TODO: profile and distance checker placeholder,
 Widget infoLabel(double pos, String text){
@@ -43,9 +43,10 @@ Widget infoLabel(double pos, String text){
         blurRadius: 3,
         offset: const Offset(-5, 5),),
     ],),
-    margin: const EdgeInsets.all(10), child: AnimatedPositioned(
+    margin: const EdgeInsets.all(10),
+    child: AnimatedPositioned(
       left: pos,
-      duration: const Duration(seconds: 50),
+      duration: const Duration(seconds: 3),
       child:
       InkWell( borderRadius: BorderRadius.circular(20), highlightColor: Color(0xFF6F2E34),
           splashColor: Colors.black,
