@@ -42,9 +42,25 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage> {
   int page=0; //will number pages 1-4
+  bool isInRange = false;
+  bool isLoggedIn = false;
+
+  _nextObstacleTemp(){
+    debugPrint('obstacle surpassed?');
+    setState(() {
+      if(!isInRange) isInRange = true;
+      else isLoggedIn= true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (!isInRange) return Scaffold(body:
+      InkWell(onTap: (){_nextObstacleTemp();}, splashColor: Color(0xFFBBAC8E),
+        splashFactory: InkRipple.splashFactory, child: Ink(color:  Color(0xFFEFE0CB), child: buildTypeWriter('You are not in range! (⌐■_■)') )));
+    if (!isLoggedIn) return Scaffold(body:
+      InkWell(onTap: (){ _nextObstacleTemp();}, splashColor: Color(0xFFBBAC8E),
+          splashFactory: InkRipple.splashFactory, child: Ink(color:  Color(0xFFEFE0CB), child: buildTypeWriter('Please Log in! ಠﻌಠ'))));
     return Scaffold(
       backgroundColor: Color(0xFFEFE0CB),
       appBar: AppBar(
@@ -64,5 +80,4 @@ Widget buildPages(int page){
     case 3: return clueboard3(); break;
     default: return home0(); //case 0
   }
-  return Container();
 }

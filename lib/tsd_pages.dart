@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'tsd_locations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'tsd_homepageinfo.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 
 //TODO: encapsulate search bar in statless widget to be efficient
@@ -118,9 +119,32 @@ Widget home0(){
       ],),),
     Expanded(flex: 3, child: Container(child: MyInfosWidget()))],);
 }
-Container leaderboard2(){
-  return Container();
+Widget leaderboard2(){
+  return buildTypeWriter('Coming Soon');;
+
+  // return Column(children:[
+  //   Expanded(child: buildTypeWriter('Coming Soon')),
+  //   Expanded(child: Text('tap to pass', textAlign: TextAlign.start))
+  // ]);
 }
-Container clueboard3(){
-  return Container();
+Widget clueboard3(){
+  return buildTypeWriter('Coming Soon');
+}
+
+Widget buildTypeWriter(String text){
+  TextStyle typerStyle = const TextStyle(fontFamily: 'Oswald', fontSize: 50, );
+
+  return IgnorePointer(child: Container(alignment: Alignment.center, padding: EdgeInsets.all(50), child: AnimatedTextKit(
+    animatedTexts: [
+      TypewriterAnimatedText(
+        text,
+        textStyle: typerStyle,
+        speed: const Duration(milliseconds: 150),
+        textAlign: TextAlign.center
+      ),
+    ],
+    displayFullTextOnTap: true,
+    repeatForever: true,
+    pause: const Duration(milliseconds: 65)),
+  ));
 }

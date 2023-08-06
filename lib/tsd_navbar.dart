@@ -6,12 +6,6 @@ FluidNavBar buildNav(MyHomePageState state){
   void _handleNavigationChange(int index) {
     state.setState(() {
       state.page = index;
-      // _child = AnimatedSwitcher(
-      //   switchInCurve: Curves.easeOut,
-      //   switchOutCurve: Curves.easeIn,
-      //   duration: Duration(milliseconds: 500),
-      //   child: _child,
-      // );
     });
   }
   FluidNavBar bob = FluidNavBar(
