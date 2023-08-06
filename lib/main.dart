@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'tsd_navbar.dart';
 import 'tsd_pages.dart';
-
+import 'tsd_infoscreens.dart';
 // <key>NSLocationTemporaryUsageDescriptionDictionary</key>
 // <dict>
 // <key>YourPurposeKey</key>
@@ -44,6 +44,8 @@ class MyHomePageState extends State<MyHomePage> {
   int page=0; //will number pages 1-4
   bool isInRange = false;
   bool isLoggedIn = false;
+  bool infoScreen = false; //for room info, for homepage info
+  int infoNum = 0;
 
   _nextObstacleTemp(){
     debugPrint('obstacle surpassed?');
@@ -55,29 +57,63 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isInRange) return Scaffold(body:
-      InkWell(onTap: (){_nextObstacleTemp();}, splashColor: Color(0xFFBBAC8E),
-        splashFactory: InkRipple.splashFactory, child: Ink(color:  Color(0xFFEFE0CB), child: buildTypeWriter('You are not in range! (⌐■_■)') )));
-    if (!isLoggedIn) return Scaffold(body:
-      InkWell(onTap: (){ _nextObstacleTemp();}, splashColor: Color(0xFFBBAC8E),
-          splashFactory: InkRipple.splashFactory, child: Ink(color:  Color(0xFFEFE0CB), child: buildTypeWriter('Please Log in! ಠﻌಠ'))));
-    return Scaffold(
+    if (infoScreen) {
+      switch(infoNum){
+        case 1: return howitworks1(this); break;
+        case 2: return howitwasbuilt2(this); break;
+        case 3: return meetteam3(this); break;
+        case 4: return learnmore4(this); break;
+      }
+    }
+    if (!isInRange) {
+      return Scaffold(body:
+      InkWell(onTap: () {
+        _nextObstacleTemp();
+      },
+          splashColor: Color(0xFFBBAC8E),
+          splashFactory: InkRipple.splashFactory,
+          child: Ink(color: Color(0xFFEFE0CB), child:
+          Column(children: [Flexible(
+              flex: 3,
+              child: Container(padding: EdgeInsets.all(25),alignment: Alignment.bottomCenter, child: buildTypeWriter('You are not in range! (⌐■_■)'))),
+            Flexible(flex: 2, child: Container(alignment: Alignment.topCenter, child: const Text('tap to skip for now', style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'SourceCodePro',
+                fontSize: 20)))
+            )]))));
+    }if (!isLoggedIn) {
+      return Scaffold(body:
+      InkWell(onTap: () {
+        _nextObstacleTemp();
+      },
+          splashColor: Color(0xFFBBAC8E),
+          splashFactory: InkRipple.splashFactory,
+          child: Ink(color: Color(0xFFEFE0CB), child:
+          Column(children: [Flexible(
+              flex: 3,
+              child: Container(padding: EdgeInsets.all(25), alignment: Alignment.bottomCenter, child: buildTypeWriter('Please Log In! ಠﻌಠ'))),
+             Flexible(flex: 2, child: Container(alignment: Alignment.topCenter, child: const Text('tap to skip for now', style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'SourceCodePro',
+                fontSize: 20)))
+             )]))));
+    }return Scaffold(
       backgroundColor: Color(0xFFEFE0CB),
       appBar: AppBar(
         backgroundColor: Color(0xFF6F2E34),
         title: Text('TJ Scavenger Shell', style: TextStyle(color: Color(0xFFEFE0CB)),),
       ),
-      body: buildPages(page),
+      body: buildPages(page, this),
       bottomNavigationBar: buildNav(this),
     );
   }
 }
 
-Widget buildPages(int page){
+Widget buildPages(int page, MyHomePageState state){
   switch(page){
     case 1: return freshMode1(); break;
     case 2: return leaderboard2(); break;
     case 3: return clueboard3(); break;
-    default: return home0(); //case 0
+    default: return home0(state); //case 0
   }
 }

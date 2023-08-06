@@ -4,6 +4,7 @@ import 'tsd_locations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'tsd_homepageinfo.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'main.dart';
 
 
 //TODO: encapsulate search bar in statless widget to be efficient
@@ -108,7 +109,7 @@ Future<String> determinePosition() async {
   return pos.toJson().toString();
 }
 
-Widget home0(){
+Widget home0(MyHomePageState state){
   return Column(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -117,24 +118,19 @@ Widget home0(){
         Container( padding: EdgeInsets.all(15), alignment: Alignment.topRight, child: Text('TJ Scavenger', style: TextStyle(fontFamily: 'Oswald', fontSize: 50)), color: Color(0xFF6F2E34)), //TODO: check rendering as png AND svg
         Positioned(bottom: 0, child: Container(height: 100, width:100,  decoration: BoxDecoration(image: DecorationImage(image:AssetImage("assets/profile.png")),)),)
       ],),),
-    Expanded(flex: 3, child: Container(child: MyInfosWidget()))],);
+    Expanded(flex: 3, child: Container(child: MyInfosWidget(myState: state)))],);
 }
 Widget leaderboard2(){
-  return buildTypeWriter('Coming Soon');;
-
-  // return Column(children:[
-  //   Expanded(child: buildTypeWriter('Coming Soon')),
-  //   Expanded(child: Text('tap to pass', textAlign: TextAlign.start))
-  // ]);
+  return Container(padding: EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Coming Soon'));
 }
 Widget clueboard3(){
-  return buildTypeWriter('Coming Soon');
+  return Container(padding: EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Coming Soon'));
 }
 
 Widget buildTypeWriter(String text){
   TextStyle typerStyle = const TextStyle(fontFamily: 'Oswald', fontSize: 50, );
 
-  return IgnorePointer(child: Container(alignment: Alignment.center, padding: EdgeInsets.all(50), child: AnimatedTextKit(
+  return IgnorePointer(child:  AnimatedTextKit(
     animatedTexts: [
       TypewriterAnimatedText(
         text,
@@ -143,8 +139,8 @@ Widget buildTypeWriter(String text){
         textAlign: TextAlign.center
       ),
     ],
-    displayFullTextOnTap: true,
+    displayFullTextOnTap: true,//this is useless currently
     repeatForever: true,
     pause: const Duration(milliseconds: 65)),
-  ));
+  );
 }

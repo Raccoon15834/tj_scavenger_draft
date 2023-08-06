@@ -83,13 +83,16 @@ Widget buildLottie(bool searchMode, double distance){
   Color? lottieColor = Color.lerp(Colors.red, Colors.blue, distanceCalibrate);
   lottieColor==null? hotColdColor=Colors.black: hotColdColor=lottieColor;
 
-  if (!searchMode) return Lottie.asset('assets/108687-green-pinging.json', delegates: LottieDelegates(
-    values: [ValueDelegate.color(["ellipes - 2", '**'], value: lottieColor),
-      ValueDelegate.color(["ellipes - 3", '**'], value: lottieColor),
-      ValueDelegate.color(["ellipes - 4", '**'], value: lottieColor),
-      ValueDelegate.color(["ellipes - 5", '**'], value: lottieColor),
-      ValueDelegate.color(["ellipes - 6", '**'], value: lottieColor),
-      ValueDelegate.color(["ellipes - 7", '**'], value: lottieColor)],
-  ));
+  if (!searchMode) {
+    return Lottie.asset(
+        'assets/108687-green-pinging.json', delegates: LottieDelegates(
+      values: [ValueDelegate.color(["ellipes - 2", '**'], value: lottieColor),
+        ValueDelegate.color(["ellipes - 3", '**'], value: lottieColor),
+        ValueDelegate.color(["ellipes - 4", '**'], value: lottieColor),
+        ValueDelegate.color(["ellipes - 5", '**'], value: lottieColor),
+        ValueDelegate.color(["ellipes - 6", '**'], value: lottieColor),
+        ValueDelegate.color(["ellipes - 7", '**'], value: lottieColor)],
+    ));
+  }
   return Container();
 }
