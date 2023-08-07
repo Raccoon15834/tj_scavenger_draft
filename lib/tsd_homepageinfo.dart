@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 
-// Widget myInfoList(){
-//   return MyInfosWidget();
-// }
-
 class MyInfosWidget extends StatefulWidget{
   const MyInfosWidget({super.key, required this.myState});
   final MyHomePageState myState;
@@ -35,14 +31,13 @@ class MyInfoWidgetState extends State<MyInfosWidget> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return Container(margin: EdgeInsets.only(top: 20, left: 5),child:
       ListView(children:[
-      infoLabel(_animation, "How does the TJ_Scavenger App work?",-0.75, state, 1),
-      infoLabel(_animation, "How was TJ_Scavenger built?",-0.5, state, 2),
+      infoLabel(_animation, "How does the NavTJ App work?",-0.75, state, 1),
+      infoLabel(_animation, "How was NavTJ built?",-0.5, state, 2),
       infoLabel(_animation, "Meet the Team",-0.75, state, 3),
       infoLabel(_animation, "Want to learn more? Wednesday A Block MAD",-1, state, 4),
     ]));
   }
 }
-//TODO: fix animation (stack is not constrained error), add icons
 //TODO: make actual info pages,
 //TODO: profile and distance checker placeholder,
 //TODO: calibrate beeper based on original distance from destination

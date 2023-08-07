@@ -101,7 +101,7 @@ class MyHomePageState extends State<MyHomePage> {
       backgroundColor: Color(0xFFEFE0CB),
       appBar: AppBar(
         backgroundColor: Color(0xFF6F2E34),
-        title: Text('TJ Scavenger Shell', style: TextStyle(color: Color(0xFFEFE0CB)),),
+        title: Text('NavTJ', style: TextStyle(color: Color(0xFFEFE0CB)),),
       ),
       body: buildPages(page, this),
       bottomNavigationBar: buildNav(this),
