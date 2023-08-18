@@ -51,6 +51,12 @@ dev_dependencies:
   lottie: ^2.4.0
   animated_text_kit: ^4.2.2
   drop_cap_text: ^1.1.3
+  flutter_bloc: ^8.1.3
+#  equatable: ^2.0.5
+#  http: ^1.1.0
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.7.3
+  google_sign_in: ^6.1.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -75,10 +81,9 @@ flutter:
   assets:
     - assets/108687-green-pinging.json
     - assets/profile.png
-    - assets/animation_lkzliura.json
-    - assets/animation_lkzoxj16.json
-    - assets/animation_lkzm4fc6.json
-    - assets/animation_lkzpazuy.json
+    - assets/animation_llfhu00u.json
+    - assets/googleimage.png
+    - assets/animation_llg1ssw1.json
 
 
   # To add assets to your application, add an assets section, like this:

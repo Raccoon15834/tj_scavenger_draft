@@ -12,10 +12,11 @@ import 'main.dart';
 
 //TODO: check geolocater package for platform-specific-settings AND ASK FOR PERMISSIONS
 //TODO: textual directions, sql database (sqflite)
+//add 3d anims??? .gib files???
 Container freshMode1(){
   return Container(
     width: double.infinity,
-    padding: EdgeInsets.all(50),
+    padding: const EdgeInsets.all(50),
     child: const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [Text('WHERE TO?', style: TextStyle(fontFamily: 'Oswald', fontSize: 50),), freshModeHotCold()],
@@ -113,34 +114,155 @@ Widget home0(MyHomePageState state){
   return Column(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-    Expanded(flex: 1, child:
+    Expanded(flex: 1, child://TODO fix sizing of infoscreens icons as well
       Stack( children: [//TODO: fix sizing of profile to be dynmaic to screen size (using row flex +empty container)
-        Container( padding: EdgeInsets.all(15), alignment: Alignment.topRight, child: Text('TJ Scavenger', style: TextStyle(fontFamily: 'Oswald', fontSize: 50)), color: Color(0xFF6F2E34)), //TODO: check rendering as png AND svg
-        Positioned(bottom: 0, child: Container(height: 100, width:100,  decoration: BoxDecoration(image: DecorationImage(image:AssetImage("assets/profile.png")),)),)
+        Container( padding: EdgeInsets.all(40), alignment: Alignment.topRight, child: Text('NavTJ', style: TextStyle(fontFamily: 'Oswald', fontSize: 50)), color: Color(0xFF6F2E34)), //TODO: check rendering as png AND svg
+        Positioned(bottom: 0, child: InkWell(onTap: (){
+          state.setState(() {
+            state.infoNum=5;
+            state.infoScreen=true;
+          });
+        },
+            child: Container(height: 100, width: 100,  decoration: BoxDecoration(image: DecorationImage(image:AssetImage("assets/profile.png"))),)),)
       ],),),
-    Expanded(flex: 3, child: Container(child: MyInfosWidget(myState: state)))],);
+    Expanded(flex: 3, child: MyInfosWidget(myState: state))],);
 }
 Widget leaderboard2(){
-  return Container(padding: EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Coming Soon'));
+  return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Coming Soon'));
 }
 Widget clueboard3(){
-  return Container(padding: EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Coming Soon'));
+  return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Coming Soon'));
+  //return Center(child: pythonDataWidget());
 }
-
 Widget buildTypeWriter(String text){
   TextStyle typerStyle = const TextStyle(fontFamily: 'Oswald', fontSize: 50, );
 
   return IgnorePointer(child:  AnimatedTextKit(
-    animatedTexts: [
-      TypewriterAnimatedText(
-        text,
-        textStyle: typerStyle,
-        speed: const Duration(milliseconds: 150),
-        textAlign: TextAlign.center
-      ),
-    ],
-    displayFullTextOnTap: true,//this is useless currently
-    repeatForever: true,
-    pause: const Duration(milliseconds: 65)),
+      animatedTexts: [
+        TypewriterAnimatedText(
+            text,
+            textStyle: typerStyle,
+            speed: const Duration(milliseconds: 150),
+            textAlign: TextAlign.center
+        ),
+      ],
+      displayFullTextOnTap: true,//this is useless currently
+      repeatForever: true,
+      pause: const Duration(milliseconds: 65)),
   );
 }
+
+// void _initStarCore() async{
+//   StarCoreFactory starcore = await Starflut.getFactory();
+// }
+// class pythonDataWidget extends StatelessWidget{
+//   const pythonDataWidget({super.key});
+//
+//   Widget build(BuildContext context) {
+//     return MultiBlocProvider(
+//       providers: [
+//         BlocProvider(create: (_) => DataCubit()),
+//       ],
+//       child: const Center(
+//         child: DataScreen(),
+//       ),
+//     );
+//   }
+// }
+//
+// class DataScreen extends StatefulWidget {
+//   const DataScreen({Key? key}) : super(key: key);
+//   @override
+//   State<DataScreen> createState() => _DataScreenState();
+// }
+//
+// class _DataScreenState extends State<DataScreen> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     DataCubit.cubit(context).fetch();
+//     //print(th);
+//     //print(DataCubit.cubit(context).state);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // return FutureBuilder(
+//     //   initialData: 'Loading...',
+//     //   future: DataCubit.cubit(context).fetch(),
+//     //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+//     //     return Text( snapshot.data );
+//     //   }
+//     // );
+//
+//     return BlocBuilder<DataCubit, DataState>(
+//         builder: (context, state) {
+//           // loading
+//           if (state is DataFetchLoading) {
+//             return const Center(
+//               child: CircularProgressIndicator(),
+//             );
+//           }
+//
+//           // success
+//           else if (state is DataFetchSuccess) {
+//             return ListView(
+//               children: state.data!.words
+//                   .map(
+//                     (word) => ListTile(
+//                   title: Text(word),
+//                 ),
+//               )
+//                   .toList(),
+//             );
+//           }
+//
+//           // failure
+//           else if (state is DataFetchFailed) {
+//             return Center(
+//               child: Text(state.message!),
+//             );
+//           }
+//
+//           // something unexpected
+//           return const Center(
+//             child: Text('Something went wrong'),
+//           );
+//         },
+//     );
+//   }
+// }
+//
+// pythonDataLoader(BuildContext context, DataState state){
+//   // loading
+//   if (state is DataFetchLoading) {
+//     return const Center(
+//       child: CircularProgressIndicator(),
+//     );
+//   }
+//
+//   // success
+//   else if (state is DataFetchSuccess) {
+//     return ListView(
+//       children: state.data!.words
+//           .map(
+//             (word) => ListTile(
+//           title: Text(word),
+//         ),
+//       )
+//           .toList(),
+//     );
+//   }
+//
+//   // failure
+//   else if (state is DataFetchFailed) {
+//     return Center(
+//       child: Text(state.message!),
+//     );
+//   }
+//
+//   // something unexpected
+//   return const Center(
+//     child: Text('Something went wrong'),
+//   );
+// }
