@@ -17,13 +17,12 @@ import 'firebase_options.dart';
 void main() async{ //MaterialApp is stateless, Scaffold is stateful
   WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
-  runApp( MyApp());
+  runApp( const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({super.key});
+   const MyApp({super.key});
 
-  //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,24 +30,20 @@ class MyApp extends StatelessWidget {
       home: FutureBuilder(
         future: Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
         builder: (context, snapshot) {
-          print(snapshot.connectionState);
-          // if (snapshot.hasError) {
-          //   print(snapshot.error.toString);
-          //   return Text('broken');
-          // }
+          //print(snapshot.connectionState);
 
           if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp(
               title: 'Flutter Demo',
               theme: ThemeData(
-                  colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF6F2E34)),
+                  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6F2E34)),
                   useMaterial3: true,
                   fontFamily: 'SourceCodePro'
               ),
               home: const MyHomePage(),
             );
           }
-          return Container(height: double.infinity, width: double.infinity, color: Color(0xFFEFE0CB), alignment: Alignment.center,
+          return Container(height: double.infinity, width: double.infinity, color: const Color(0xFFEFE0CB), alignment: Alignment.center,
             child: Lottie.asset('animation_llg1ssw1.json',width: double.infinity));
         },
       ),
@@ -69,7 +64,6 @@ class MyHomePageState extends State<MyHomePage> {
   bool infoScreen = false; //for room info, for homepage info
   int infoNum = 0;
   bool? fcpsLogIn = false;
-  bool isInRange = false;
   String? profileEmail = 'unknown';
   String? userDisplayName = 'unknown';
 
@@ -125,10 +119,10 @@ class MyHomePageState extends State<MyHomePage> {
     //          )]))));
     // }
     return Scaffold(
-      backgroundColor: Color(0xFFEFE0CB),
+      backgroundColor: const Color(0xFFEFE0CB),
       appBar: AppBar(
-        backgroundColor: Color(0xFF6F2E34),
-        title: Text('NavTJ', style: TextStyle(color: Color(0xFFEFE0CB)),),
+        backgroundColor: const Color(0xFF6F2E34),
+        title: const Text('NavTJ', style: TextStyle(color: Color(0xFFEFE0CB)),),
       ),
       body: buildPages(page, this),
       bottomNavigationBar: buildNav(this),
@@ -138,7 +132,7 @@ class MyHomePageState extends State<MyHomePage> {
 
 Widget buildPages(int page, MyHomePageState state){
   switch(page){
-    case 1: return freshMode1(); break;
+    case 1: return freshMode1(state); break;
     case 2: return leaderboard2(); break;
     case 3: return clueboard3(); break;
     default: return home0(state); //case 0

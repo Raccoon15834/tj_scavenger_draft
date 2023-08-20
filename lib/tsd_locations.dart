@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'tsd_pages.dart';
+import 'tsd_roomlist.dart';
 
 class Location{
   //the following are NEVER revealed to the user
@@ -8,82 +9,87 @@ class Location{
   double latitude=0;
   double? altitudeLevel;
   //the following are searchable things
-  String? roomNum;
-  String? teacherName; // teacher name
-  List<String>? purpose; //bio lab, statistics, mobile-apps-club etc
+  String roomNum;
+  String teacherName = 'Coming Soon'; // teacher name
+  String purpose = 'Coming Soon'; //bio lab, statistics, mobile-apps-club etc
   //in the future, have addable description user that can be used to search by (clubs, etc)
 
-  Location.simple(this.latitude, this.longitude, this.altitudeLevel, this.roomNum){
-  }
+  Location.simple(this.latitude, this.longitude, this.altitudeLevel, this.roomNum);
   Location.supersimple(this.roomNum);
-  Location(this.latitude, this.longitude, this.altitudeLevel, this.roomNum, this.teacherName, this.purpose){
-  }
-}//bedrooms are numbered 220-223
-List<String> roomNumsList = ['kitchen', 'living room','220', '221','222','223'];
+  Location(this.latitude, this.longitude, this.altitudeLevel, this.roomNum, this.teacherName, this.purpose);
 
-Widget buildLocList(bool searchMode, String query, HotColdState hcs){
+}//bedrooms are numbered 220-223
+
+
+Widget buildLocList(bool searchMode, String query, HotColdState hcs, int num){
   if (!searchMode) return Container();
   ListView mLW = ListView();
   if(query=='') {//if nothing return them all
     mLW = ListView.builder(
-      itemCount: roomNumsList.length,
+      itemCount: roomList.length,
       itemBuilder: (context, index) {
-        var result = roomNumsList[index];
-        return ListTile(
-          title: Text(result),
-          //onTap: changeDestination(result, hcs),
-        );
+        var result = roomList[index].roomNum;
+        return locationTile(result, hcs, index, num);
       },
     );
   }else { //otherwise display relevant list
     List<String> matchQuery = [];
-    for (var num in roomNumsList) {
+    List<int> indeces = [];
+    for (int i=0; i<roomList.length; i++) {
+      var num = roomList[i].roomNum;
       if (num.toLowerCase().contains(query.toLowerCase())) {
         matchQuery.add(num);
+        indeces.add(i);
       }
     }
     mLW = ListView.builder(
       itemCount: matchQuery.length,
       itemBuilder: (context, index) {
         var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-          //onTap: changeDestination(result, hcs),
-        );
+        var i = indeces[index];
+        return locationTile(result, hcs, i, num);
       },
     );
   }
   return SizedBox(height: 300, child: mLW);
 }
-
-changeDestination(String value, HotColdState hcs){
-  hcs.setState(() {
-    hcs.destination = Location.supersimple(value);
-  });
+ListTile locationTile(String result, HotColdState hcs, int index, int num){
+  return ListTile(
+    title: Text(result),
+    onTap: (){
+      hcs.state.setState(() {
+        hcs.displayLocInfoScreen= true;
+        hcs.infoScreenLocation = roomList[index];
+        hcs.whichSearch = num;
+      });
+    },
+  );
 }
 
-Widget buildTextBox(bool searchMode, HotColdState hcs){
+
+Widget buildTextBox(bool searchMode, HotColdState hcs, int num){
   if (!searchMode) return Container();
-  return SizedBox(width: 200, child: TextField(onChanged: (value)=> changeQuery(hcs, value)));
+  return SizedBox(width: 200, child: TextField(onChanged: (value)=> changeQuery(hcs, value, num)));
 }
-changeQuery(HotColdState hcs, String value){
+changeQuery(HotColdState hcs, String value, int num){
   hcs.setState(() {
-    hcs.query = value;
+    if(num==1) hcs.query = value;
+    if(num==2) hcs.query2 = value;
   });
 }
 Widget whichIcon(bool searchMode){
-  if(searchMode) return Icon(Icons.arrow_back);
-  return Icon(Icons.search_rounded);
+  if(searchMode) return const Icon(Icons.arrow_back);
+  return const Icon(Icons.search_rounded);
 }
 
-Widget buildLottie(bool searchMode, double distance){
+Widget buildLottie(bool searchMode, bool searchMode2, double distance){
   double distanceCalibrate = distance/100;
   if (distanceCalibrate>1) distanceCalibrate=1;
   Color hotColdColor = Colors.black;
   Color? lottieColor = Color.lerp(Colors.red, Colors.blue, distanceCalibrate);
   lottieColor==null? hotColdColor=Colors.black: hotColdColor=lottieColor;
 
-  if (!searchMode) {
+  if (!searchMode && !searchMode2) {
     return Lottie.asset(
         'assets/108687-green-pinging.json', delegates: LottieDelegates(
       values: [ValueDelegate.color(["ellipes - 2", '**'], value: lottieColor),

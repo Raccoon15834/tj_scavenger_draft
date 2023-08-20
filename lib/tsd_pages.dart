@@ -4,6 +4,7 @@ import 'tsd_locations.dart';
 import 'package:geolocator/geolocator.dart';
 import 'tsd_homepageinfo.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'tsd_infoscreens.dart';
 import 'main.dart';
 
 
@@ -13,33 +14,51 @@ import 'main.dart';
 //TODO: check geolocater package for platform-specific-settings AND ASK FOR PERMISSIONS
 //TODO: textual directions, sql database (sqflite)
 //add 3d anims??? .gib files???
-Container freshMode1(){
+Container freshMode1(MyHomePageState state){
+  //TODO: uncomment AFTER DEVELOPED!!!!
+  print(state.fcpsLogIn.toString());
+  // if(state.fcpsLogIn==false){
+  //   return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Please Log In with FCPS'));
+  // }
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.all(50),
-    child: const Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text('WHERE TO?', style: TextStyle(fontFamily: 'Oswald', fontSize: 50),), freshModeHotCold()],
+    child:  ListView(shrinkWrap: true,
+      children: [ const Text('WHERE TO?', style: TextStyle(fontFamily: 'Oswald', fontSize: 50),),  freshModeHotCold(parentState: state)],
     ),
   );
 }
 class freshModeHotCold extends StatefulWidget{
-  const freshModeHotCold({super.key});
+  const freshModeHotCold({super.key, required this.parentState});
+  final MyHomePageState parentState;
 
   @override
-  State<freshModeHotCold> createState() => HotColdState();
+  State<freshModeHotCold> createState() => HotColdState(state: parentState);
 }
-class HotColdState extends State<freshModeHotCold> {
+class HotColdState extends State<freshModeHotCold>{
+  HotColdState({required this.state});
+  final MyHomePageState state;
+  //TODO: here define whether is in range or not
+
+  bool isInRange = true;
   bool searchMode = false;
+  bool searchMode2 = false;
   String query='';
+  String query2='';
+  Location destination = Location.simple(38.8865184, -77.3913343, 82.9, 'Nobel Commons');
+  Location currentLoc = Location.simple(38.8865184, -77.3913343, 82.9, 'Nobel Commons');
   String positionData = 'Loading...';
-  Location destination = Location.simple(38.8865184, -77.3913343, 82.9, 'homeroom');
   String distanceToTargetText = 'Loading...';
   double distance = 0.0;
 
+  bool displayLocInfoScreen = false;
+  int whichSearch = 1;
+  Location infoScreenLocation = Location.simple(38.8865184, -77.3913343, 82.9, 'homeroom');
+
   @override
   void initState() {
-    Stream<Position> positionStream = Geolocator.getPositionStream(locationSettings: LocationSettings( accuracy: LocationAccuracy.high, distanceFilter: 1,));
+    super.initState();
+    Stream<Position> positionStream = Geolocator.getPositionStream(locationSettings: const LocationSettings( accuracy: LocationAccuracy.high, distanceFilter: 1,));
     positionStream.listen(
         (Position? position) {
           setState(() {
@@ -60,7 +79,6 @@ class HotColdState extends State<freshModeHotCold> {
 
 
   void customShowSearch(){//TODO, when get off page, delete position stream (or automatic with deletion of widget?)
-    debugPrint('search mode was $searchMode');
     // if (positionStream!=null) {
     //   searchMode ? positionStream?.pause() : positionStream?.resume();
     // }
@@ -68,18 +86,28 @@ class HotColdState extends State<freshModeHotCold> {
         searchMode ? searchMode=false : searchMode=true;
       });
     }
+  void customShowSearch2(){
+    setState(() {
+      searchMode2 ? searchMode2=false : searchMode2=true;
+    });
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    return Expanded( child: ListView(
-      children: [Row(children:[IconButton(icon: whichIcon(searchMode), onPressed: customShowSearch,),buildTextBox(searchMode, this)]),
-        Text('Destination: ${destination.roomNum}'), buildLocList(searchMode, query, this),
+    if(displayLocInfoScreen==true){
+      return buildLocationInfoScreen(this, infoScreenLocation, whichSearch);
+    }
+    return ListView( shrinkWrap: true,//TODO make customShowSearch expanded, EXPAND TO WIDTHHH
+      children: [Row(children:[IconButton(icon: whichIcon(searchMode2), onPressed: customShowSearch2,),buildTextBox(searchMode2, this, 2)]),
+        Text('Current Location: ${currentLoc.roomNum}'),buildLocList(searchMode2, query2, this, 2),
+        Row(children:[IconButton(icon: whichIcon(searchMode), onPressed: customShowSearch,),buildTextBox(searchMode, this, 1)]),
+        Text('Destination: ${destination.roomNum}'), buildLocList(searchMode, query, this, 1),
         Text(positionData),
         Text(distanceToTargetText),
-        buildLottie(searchMode, distance),
+        buildLottie(searchMode, searchMode2, distance),
         ],
-    ));
+    );
   }
 }
 
@@ -116,14 +144,14 @@ Widget home0(MyHomePageState state){
     crossAxisAlignment: CrossAxisAlignment.stretch, children: [
     Expanded(flex: 1, child://TODO fix sizing of infoscreens icons as well
       Stack( children: [//TODO: fix sizing of profile to be dynmaic to screen size (using row flex +empty container)
-        Container( padding: EdgeInsets.all(40), alignment: Alignment.topRight, child: Text('NavTJ', style: TextStyle(fontFamily: 'Oswald', fontSize: 50)), color: Color(0xFF6F2E34)), //TODO: check rendering as png AND svg
+        Container( padding: const EdgeInsets.all(40), alignment: Alignment.topRight, color: const Color(0xFF6F2E34), child: const Text('NavTJ', style: TextStyle(fontFamily: 'Oswald', fontSize: 50))), //TODO: check rendering as png AND svg
         Positioned(bottom: 0, child: InkWell(onTap: (){
           state.setState(() {
             state.infoNum=5;
             state.infoScreen=true;
           });
         },
-            child: Container(height: 100, width: 100,  decoration: BoxDecoration(image: DecorationImage(image:AssetImage("assets/profile.png"))),)),)
+            child: Container(height: 100, width: 100,  decoration: const BoxDecoration(image: DecorationImage(image:AssetImage("assets/profile.png"))),)),)
       ],),),
     Expanded(flex: 3, child: MyInfosWidget(myState: state))],);
 }
@@ -151,118 +179,3 @@ Widget buildTypeWriter(String text){
       pause: const Duration(milliseconds: 65)),
   );
 }
-
-// void _initStarCore() async{
-//   StarCoreFactory starcore = await Starflut.getFactory();
-// }
-// class pythonDataWidget extends StatelessWidget{
-//   const pythonDataWidget({super.key});
-//
-//   Widget build(BuildContext context) {
-//     return MultiBlocProvider(
-//       providers: [
-//         BlocProvider(create: (_) => DataCubit()),
-//       ],
-//       child: const Center(
-//         child: DataScreen(),
-//       ),
-//     );
-//   }
-// }
-//
-// class DataScreen extends StatefulWidget {
-//   const DataScreen({Key? key}) : super(key: key);
-//   @override
-//   State<DataScreen> createState() => _DataScreenState();
-// }
-//
-// class _DataScreenState extends State<DataScreen> {
-//   @override
-//   void initState() {
-//     super.initState();
-//     DataCubit.cubit(context).fetch();
-//     //print(th);
-//     //print(DataCubit.cubit(context).state);
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // return FutureBuilder(
-//     //   initialData: 'Loading...',
-//     //   future: DataCubit.cubit(context).fetch(),
-//     //   builder: (BuildContext context, AsyncSnapshot snapshot) {
-//     //     return Text( snapshot.data );
-//     //   }
-//     // );
-//
-//     return BlocBuilder<DataCubit, DataState>(
-//         builder: (context, state) {
-//           // loading
-//           if (state is DataFetchLoading) {
-//             return const Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//
-//           // success
-//           else if (state is DataFetchSuccess) {
-//             return ListView(
-//               children: state.data!.words
-//                   .map(
-//                     (word) => ListTile(
-//                   title: Text(word),
-//                 ),
-//               )
-//                   .toList(),
-//             );
-//           }
-//
-//           // failure
-//           else if (state is DataFetchFailed) {
-//             return Center(
-//               child: Text(state.message!),
-//             );
-//           }
-//
-//           // something unexpected
-//           return const Center(
-//             child: Text('Something went wrong'),
-//           );
-//         },
-//     );
-//   }
-// }
-//
-// pythonDataLoader(BuildContext context, DataState state){
-//   // loading
-//   if (state is DataFetchLoading) {
-//     return const Center(
-//       child: CircularProgressIndicator(),
-//     );
-//   }
-//
-//   // success
-//   else if (state is DataFetchSuccess) {
-//     return ListView(
-//       children: state.data!.words
-//           .map(
-//             (word) => ListTile(
-//           title: Text(word),
-//         ),
-//       )
-//           .toList(),
-//     );
-//   }
-//
-//   // failure
-//   else if (state is DataFetchFailed) {
-//     return Center(
-//       child: Text(state.message!),
-//     );
-//   }
-//
-//   // something unexpected
-//   return const Center(
-//     child: Text('Something went wrong'),
-//   );
-// }
