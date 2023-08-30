@@ -68,8 +68,10 @@ ListTile locationTile(String result, HotColdState hcs, int index, int num){
 
 
 Widget buildTextBox(bool searchMode, HotColdState hcs, int num){
+  FocusNode fN = FocusNode();
+  fN.requestFocus();
   if (!searchMode) return Container();
-  return SizedBox(width: 200, child: TextField(onChanged: (value)=> changeQuery(hcs, value, num)));
+  return SizedBox(width: 200, child: TextField(onChanged: (value)=> changeQuery(hcs, value, num), focusNode: fN));
 }
 changeQuery(HotColdState hcs, String value, int num){
   hcs.setState(() {
@@ -78,8 +80,11 @@ changeQuery(HotColdState hcs, String value, int num){
   });
 }
 Widget whichIcon(bool searchMode){
+  BoxDecoration roundedBoxDeco = const BoxDecoration(
+      color: Color(0xFFEE7674),
+      borderRadius: BorderRadius.all(Radius.circular(10)) );
   if(searchMode) return const Icon(Icons.arrow_back);
-  return const Icon(Icons.search_rounded);
+  return  Row(children:[Icon(Icons.search_rounded), Container(width: 220, height: 30, decoration: roundedBoxDeco)]);//TODO make this a row
 }
 
 Widget buildLottie(bool searchMode, bool searchMode2, double distance){

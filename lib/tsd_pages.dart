@@ -15,11 +15,13 @@ import 'main.dart';
 //TODO: textual directions, sql database (sqflite)
 //add 3d anims??? .gib files???
 Container freshMode1(MyHomePageState state){
-  //TODO: uncomment AFTER DEVELOPED!!!!
-  print(state.fcpsLogIn.toString());
-  // if(state.fcpsLogIn==false){
-  //   return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Please Log In with FCPS'));
-  // }
+  //print(state.fcpsLogIn.toString());
+  if(state.fcpsLogIn==false){
+    return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Please Log In with FCPS'));
+  }
+  if(state.isInRange==false){
+    return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('You are not close enough to TJHSST'));
+  }
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.all(50),
@@ -39,8 +41,6 @@ class HotColdState extends State<freshModeHotCold>{
   HotColdState({required this.state});
   final MyHomePageState state;
   //TODO: here define whether is in range or not
-
-  bool isInRange = true;
   bool searchMode = false;
   bool searchMode2 = false;
   String query='';
@@ -50,6 +50,7 @@ class HotColdState extends State<freshModeHotCold>{
   String positionData = 'Loading...';
   String distanceToTargetText = 'Loading...';
   double distance = 0.0;
+  double distanceFromSchool = 0.0;
 
   bool displayLocInfoScreen = false;
   int whichSearch = 1;
@@ -70,7 +71,13 @@ class HotColdState extends State<freshModeHotCold>{
               positionData='${position.latitude.toString()}, ${position.longitude.toString()}, altitude: ${position.altitude.toString()}';
               distance = Geolocator.distanceBetween(position.latitude, position.longitude, destination.latitude, destination.longitude);
               distanceToTargetText = '${distance.toString()} m';
-
+              distanceFromSchool = Geolocator.distanceBetween(position.latitude, position.longitude, 38.81842381360037, -77.16878373588156);
+              if(distanceFromSchool < 150) {state.setState(() {
+                state.isInRange = true;
+              });}
+              else {state.setState(() {
+                state.isInRange = false;
+              });}
             }
           });
         }
@@ -92,17 +99,17 @@ class HotColdState extends State<freshModeHotCold>{
     });
   }
 
-
+  TextStyle contentBig = TextStyle(fontFamily: 'Oswald', fontSize: 20);
   @override
   Widget build(BuildContext context) {
     if(displayLocInfoScreen==true){
       return buildLocationInfoScreen(this, infoScreenLocation, whichSearch);
     }
-    return ListView( shrinkWrap: true,//TODO make customShowSearch expanded, EXPAND TO WIDTHHH
-      children: [Row(children:[IconButton(icon: whichIcon(searchMode2), onPressed: customShowSearch2,),buildTextBox(searchMode2, this, 2)]),
-        Text('Current Location: ${currentLoc.roomNum}'),buildLocList(searchMode2, query2, this, 2),
-        Row(children:[IconButton(icon: whichIcon(searchMode), onPressed: customShowSearch,),buildTextBox(searchMode, this, 1)]),
-        Text('Destination: ${destination.roomNum}'), buildLocList(searchMode, query, this, 1),
+    return ListView( shrinkWrap: true,
+      children: [Row(children:[MaterialButton(child: whichIcon(searchMode2), onPressed: customShowSearch2,),buildTextBox(searchMode2, this, 2)]),
+        Text('Current Location: ${currentLoc.roomNum}', style: contentBig),buildLocList(searchMode2, query2, this, 2),
+        Row(children:[MaterialButton(child: whichIcon(searchMode), onPressed: customShowSearch,),buildTextBox(searchMode, this, 1)]),
+        Text('Destination: ${destination.roomNum}', style: contentBig), buildLocList(searchMode, query, this, 1),
         Text(positionData),
         Text(distanceToTargetText),
         buildLottie(searchMode, searchMode2, distance),
@@ -156,10 +163,10 @@ Widget home0(MyHomePageState state){
     Expanded(flex: 3, child: MyInfosWidget(myState: state))],);
 }
 Widget leaderboard2(){
-  return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Coming Soon'));
+  return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Leaderboard Coming Soon'));
 }
 Widget clueboard3(){
-  return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Coming Soon'));
+  return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Scavenger Hunt Coming Soon'));
   //return Center(child: pythonDataWidget());
 }
 Widget buildTypeWriter(String text){

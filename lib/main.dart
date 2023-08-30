@@ -64,6 +64,7 @@ class MyHomePageState extends State<MyHomePage> {
   bool infoScreen = false; //for room info, for homepage info
   int infoNum = 0;
   bool? fcpsLogIn = false;
+  bool isInRange = false;
   String? profileEmail = 'unknown';
   String? userDisplayName = 'unknown';
 
