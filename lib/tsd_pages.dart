@@ -16,12 +16,9 @@ import 'main.dart';
 //add 3d anims??? .gib files???
 Container freshMode1(MyHomePageState state){
   //print(state.fcpsLogIn.toString());
-  if(state.fcpsLogIn==false){
-    return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Please Log In with FCPS'));
-  }
-  if(state.isInRange==false){
-    return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('You are not close enough to TJHSST'));
-  }
+  // if(state.fcpsLogIn==false){
+  //   return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('Please Log In with FCPS'));
+  // }
   return Container(
     width: double.infinity,
     padding: const EdgeInsets.all(50),
@@ -51,6 +48,7 @@ class HotColdState extends State<freshModeHotCold>{
   String distanceToTargetText = 'Loading...';
   double distance = 0.0;
   double distanceFromSchool = 0.0;
+  String directions ="Loading directions...";
 
   bool displayLocInfoScreen = false;
   int whichSearch = 1;
@@ -102,6 +100,9 @@ class HotColdState extends State<freshModeHotCold>{
   TextStyle contentBig = TextStyle(fontFamily: 'Oswald', fontSize: 20);
   @override
   Widget build(BuildContext context) {
+    // if(state.isInRange==false){
+    //   return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('You are not close enough to TJHSST'));
+    // }
     if(displayLocInfoScreen==true){
       return buildLocationInfoScreen(this, infoScreenLocation, whichSearch);
     }
@@ -112,6 +113,7 @@ class HotColdState extends State<freshModeHotCold>{
         Text('Destination: ${destination.roomNum}', style: contentBig), buildLocList(searchMode, query, this, 1),
         Text(positionData),
         Text(distanceToTargetText),
+        Text(directions),
         buildLottie(searchMode, searchMode2, distance),
         ],
     );

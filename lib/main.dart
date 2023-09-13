@@ -5,6 +5,8 @@ import 'tsd_infoscreens.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:lottie/lottie.dart';
 import 'firebase_options.dart';
+import "backendStuff.dart";
+
 
 // <key>NSLocationTemporaryUsageDescriptionDictionary</key>
 // <dict>
@@ -18,6 +20,7 @@ void main() async{ //MaterialApp is stateless, Scaffold is stateful
   WidgetsFlutterBinding.ensureInitialized();
   //await Firebase.initializeApp();
   runApp( const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {

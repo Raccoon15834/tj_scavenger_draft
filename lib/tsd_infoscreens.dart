@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:drop_cap_text/drop_cap_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'backendStuff.dart';
 
 Scaffold howitworks1(MyHomePageState state){
   TextStyle contentStyle = const TextStyle(color: Colors.black, fontFamily: 'SourceCodePro', fontSize: 15, height: 1.2);
@@ -228,6 +229,22 @@ Widget buildLocationInfoScreen(HotColdState state, Location loc, int num){
                 if(num==2) state.currentLoc = state.infoScreenLocation;
                 state.searchMode2 = false;
                 state.searchMode = false;
+                List<String> temp = [state.currentLoc.roomNum, state.destination.roomNum];
+                List<String> li =dij(temp);
+                state.destination = Location.supersimple((li.elementAt(0).toString()) + "JO");
+                for (var i = 0; i < li.length - 1; i++) {
+// TO DO
+                  if(li[i] == "Auditorium Lobby" && li[i+1] == "Art Gallery") {
+                    state.directions += "Walk through the doorway towards Nobel Commons";
+                  }
+                  if(li[i] == "Galileo Commons" && li[i+1] == "Cafeteria"){
+                    state.directions +="Facing the Greenhouse Courtyard windows walk left to the end of the hallway";
+                  }
+                  if(li[i] == "Cafeteria" && li[i+1] == "DaVinci Staircase"){
+                    state.directions +="Walk straight down the hallway and find the staircase to your right";
+                  }
+                }
+                //state.distance = //TARGET
               });},
               child: Ink( padding: const EdgeInsets.all(13), decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Color(0xFFEE7674)),
                   child:  Text(yesButtonText,  style:  const TextStyle(color: Color(0xFFEFE0CB), fontFamily: 'SourceCodePro', fontSize: 20)))),
@@ -248,6 +265,24 @@ Widget buildLocationInfoScreen(HotColdState state, Location loc, int num){
                   state.displayLocInfoScreen=false;
                   state.searchMode2 = false;
                   state.searchMode = false;
+                  print("JOJO");
+                  List<String> temp = [state.currentLoc.roomNum, state.destination.roomNum];
+                  List<String> li =dij(temp);
+                  print(li.elementAt(0));
+                  print(li.elementAt(1));
+                  for (var i = 0; i < li.length - 1; i++) {
+// TO DO
+                    if(li[i] == "Auditorium Lobby" && li[i+1] == "Art Gallery") {
+                      state.directions += "Walk through the doorway towards Nobel Commons";
+                    }
+                    if(li[i] == "Galileo Commons" && li[i+1] == "Cafeteria"){
+                      state.directions +="Facing the Greenhouse Courtyard windows walk left to the end of the hallway";
+                    }
+                    if(li[i] == "Cafeteria" && li[i+1] == "DaVinci Staircase"){
+                      state.directions +="Walk straight down the hallway and find the staircase to your right";
+                    }
+                  }
+                  state.directions= "new directions";
               });},
               child: Ink( padding: const EdgeInsets.all(13), decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: const Color(0xFFEE7674)),
                   child: const Text('Cancel',  style:  TextStyle(color: Color(0xFFEFE0CB), fontFamily: 'SourceCodePro', fontSize: 20)))),
