@@ -200,12 +200,11 @@ Widget buildLocationInfoScreen(HotColdState state, Location loc, int num){
   TextStyle textStyle = const TextStyle(color: Colors.black, fontFamily: 'SourceCodePro', fontSize: 15, height: 1.2);
   double listPad = 10;
   String prompt = "Is this the room you want to go to?";
-  String yesButtonText = "Less Go!";
+  String yesButtonText = "Let's Go!";
   if(num==2) {
     prompt = "Is the room you are currently at?";
     yesButtonText = "I am Here!";
   }
-//TODO try with set numbers in container maybe???
   return ListView(shrinkWrap: true, children: [
         Container(padding: EdgeInsets.all(listPad), child: Text(prompt, style: textStyle)),
         Container(padding: EdgeInsets.all(listPad),child: Text('Room Name: ${loc.roomNum}', style: contentStyle)),
@@ -231,18 +230,9 @@ Widget buildLocationInfoScreen(HotColdState state, Location loc, int num){
                 state.searchMode = false;
                 List<String> temp = [state.currentLoc.roomNum, state.destination.roomNum];
                 List<String> li =dij(temp);
-                state.destination = Location.supersimple((li.elementAt(0).toString()) + "JO");
-                for (var i = 0; i < li.length - 1; i++) {
-// TO DO
-                  if(li[i] == "Auditorium Lobby" && li[i+1] == "Art Gallery") {
-                    state.directions += "Walk through the doorway towards Nobel Commons";
-                  }
-                  if(li[i] == "Galileo Commons" && li[i+1] == "Cafeteria"){
-                    state.directions +="Facing the Greenhouse Courtyard windows walk left to the end of the hallway";
-                  }
-                  if(li[i] == "Cafeteria" && li[i+1] == "DaVinci Staircase"){
-                    state.directions +="Walk straight down the hallway and find the staircase to your right";
-                  }
+                state.directions = "";
+                for(var i = 0; i < li.length; i++){
+                  state.directions+=li[i];
                 }
                 //state.distance = //TARGET
               });},
@@ -270,19 +260,10 @@ Widget buildLocationInfoScreen(HotColdState state, Location loc, int num){
                   List<String> li =dij(temp);
                   print(li.elementAt(0));
                   print(li.elementAt(1));
-                  for (var i = 0; i < li.length - 1; i++) {
-// TO DO
-                    if(li[i] == "Auditorium Lobby" && li[i+1] == "Art Gallery") {
-                      state.directions += "Walk through the doorway towards Nobel Commons";
-                    }
-                    if(li[i] == "Galileo Commons" && li[i+1] == "Cafeteria"){
-                      state.directions +="Facing the Greenhouse Courtyard windows walk left to the end of the hallway";
-                    }
-                    if(li[i] == "Cafeteria" && li[i+1] == "DaVinci Staircase"){
-                      state.directions +="Walk straight down the hallway and find the staircase to your right";
-                    }
+                  state.directions = "";
+                  for(var i = 0; i < li.length; i++){
+                    state.directions+=li[i];
                   }
-                  state.directions= "new directions";
               });},
               child: Ink( padding: const EdgeInsets.all(13), decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: const Color(0xFFEE7674)),
                   child: const Text('Cancel',  style:  TextStyle(color: Color(0xFFEFE0CB), fontFamily: 'SourceCodePro', fontSize: 20)))),

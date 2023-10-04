@@ -88,7 +88,7 @@ Widget whichIcon(bool searchMode){
 }
 
 Widget buildLottie(bool searchMode, bool searchMode2, double distance){
-  double distanceCalibrate = distance/100;
+  double distanceCalibrate = distance/100;//TODO scale to distance to location
   if (distanceCalibrate>1) distanceCalibrate=1;
   Color hotColdColor = Colors.black;
   Color? lottieColor = Color.lerp(Colors.red, Colors.blue, distanceCalibrate);

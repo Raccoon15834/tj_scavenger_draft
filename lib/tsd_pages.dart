@@ -100,9 +100,9 @@ class HotColdState extends State<freshModeHotCold>{
   TextStyle contentBig = TextStyle(fontFamily: 'Oswald', fontSize: 20);
   @override
   Widget build(BuildContext context) {
-    // if(state.isInRange==false){
-    //   return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('You are not close enough to TJHSST'));
-    // }
+    if(state.isInRange==false){
+      return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('You are not close enough to TJHSST'));
+    }
     if(displayLocInfoScreen==true){
       return buildLocationInfoScreen(this, infoScreenLocation, whichSearch);
     }
