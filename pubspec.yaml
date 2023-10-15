@@ -85,8 +85,6 @@ flutter:
     - assets/animation_llfhu00u.json
     - assets/googleimage.png
     - assets/animation_llg1ssw1.json
-
-
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

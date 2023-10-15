@@ -47,8 +47,9 @@ class HotColdState extends State<freshModeHotCold>{
   String positionData = 'Loading...';
   String distanceToTargetText = 'Loading...';
   double distance = 0.0;
+  double distBtwLocNTarget = 1;
   double distanceFromSchool = 0.0;
-  String directions ="Loading directions...";
+  List<String> directions =["Loading directions..."];
 
   bool displayLocInfoScreen = false;
   int whichSearch = 1;
@@ -100,21 +101,25 @@ class HotColdState extends State<freshModeHotCold>{
   TextStyle contentBig = TextStyle(fontFamily: 'Oswald', fontSize: 20);
   @override
   Widget build(BuildContext context) {
-    if(state.isInRange==false){
-      return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('You are not close enough to TJHSST'));
-    }
+    // if(state.isInRange==false){//TODO ADD ISINRANGE BACK
+    //   return Container(padding: const EdgeInsets.all(20), alignment: Alignment.center, child: buildTypeWriter('You are not close enough to TJHSST'));
+    // }
     if(displayLocInfoScreen==true){
       return buildLocationInfoScreen(this, infoScreenLocation, whichSearch);
     }
-    return ListView( shrinkWrap: true,
+    return Column( crossAxisAlignment: CrossAxisAlignment.start,
       children: [Row(children:[MaterialButton(child: whichIcon(searchMode2), onPressed: customShowSearch2,),buildTextBox(searchMode2, this, 2)]),
-        Text('Current Location: ${currentLoc.roomNum}', style: contentBig),buildLocList(searchMode2, query2, this, 2),
+        Text('Current Location: ${currentLoc.roomNum}', style: contentBig),Container(padding: EdgeInsets.only(top:15),child:buildLocList(searchMode2, query2, this, 2)),
         Row(children:[MaterialButton(child: whichIcon(searchMode), onPressed: customShowSearch,),buildTextBox(searchMode, this, 1)]),
         Text('Destination: ${destination.roomNum}', style: contentBig), buildLocList(searchMode, query, this, 1),
-        Text(positionData),
+        Container( child:Text(positionData), padding:EdgeInsets.only(top:15)),
         Text(distanceToTargetText),
-        Text(directions),
-        buildLottie(searchMode, searchMode2, distance),
+        Container(child:Text("Directions (swipe right):", style:contentBig), padding: EdgeInsets.only(top:15)),
+        Container(height:150, child: PageView.builder(itemCount: directions.length, itemBuilder: (context, index) {
+          int stepIndex = index + 1;
+          return ListView(children: [Text('Step $stepIndex'),Text('${directions[index]}')]);
+        })),
+        buildLottie(searchMode, searchMode2, distance, distBtwLocNTarget),
         ],
     );
   }

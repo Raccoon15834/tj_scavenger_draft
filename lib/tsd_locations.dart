@@ -87,8 +87,8 @@ Widget whichIcon(bool searchMode){
   return  Row(children:[Icon(Icons.search_rounded), Container(width: 220, height: 30, decoration: roundedBoxDeco)]);//TODO make this a row
 }
 
-Widget buildLottie(bool searchMode, bool searchMode2, double distance){
-  double distanceCalibrate = distance/100;//TODO scale to distance to location
+Widget buildLottie(bool searchMode, bool searchMode2, double distance, double totalDist){
+  double distanceCalibrate = distance/totalDist;//TODO scale to distance to location
   if (distanceCalibrate>1) distanceCalibrate=1;
   Color hotColdColor = Colors.black;
   Color? lottieColor = Color.lerp(Colors.red, Colors.blue, distanceCalibrate);
