@@ -254,10 +254,10 @@ Widget buildLocationInfoScreen(HotColdState state, Location loc, int num){
                   state.displayLocInfoScreen=false;
                   state.searchMode2 = false;
                   state.searchMode = false;
-                  List<String> temp = [state.currentLoc.roomNum, state.destination.roomNum];
-                  List<String> li =dij(temp);
-                  state.directions = li;
-                  state.distBtwLocNTarget = Geolocator.distanceBetween(state.currentLoc.latitude, state.currentLoc.longitude, state.destination.latitude, state.destination.longitude);
+                  // List<String> temp = [state.currentLoc.roomNum, state.destination.roomNum];
+                  // List<String> li =dij(temp);
+                  // state.directions = li;
+                  // state.distBtwLocNTarget = Geolocator.distanceBetween(state.currentLoc.latitude, state.currentLoc.longitude, state.destination.latitude, state.destination.longitude);
               });},
               child: Ink( padding: const EdgeInsets.all(13), decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: const Color(0xFFEE7674)),
                   child: const Text('Cancel',  style:  TextStyle(color: Color(0xFFEFE0CB), fontFamily: 'SourceCodePro', fontSize: 20)))),

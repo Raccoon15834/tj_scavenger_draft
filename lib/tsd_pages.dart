@@ -8,11 +8,7 @@ import 'tsd_infoscreens.dart';
 import 'main.dart';
 
 
-//TODO: encapsulate search bar in statless widget to be efficient
-//TODO: delete padding around lottie,Change altitude to say 'floor', calibrate coloration (quadratic?)
-
-//TODO: check geolocater package for platform-specific-settings AND ASK FOR PERMISSIONS
-//TODO: textual directions, sql database (sqflite)
+//TODO: test isInRange - line 100, add back fcpsLogIn- line 15
 //add 3d anims??? .gib files???
 Container freshMode1(MyHomePageState state){
   //print(state.fcpsLogIn.toString());
@@ -49,7 +45,7 @@ class HotColdState extends State<freshModeHotCold>{
   double distance = 0.0;
   double distBtwLocNTarget = 1;
   double distanceFromSchool = 0.0;
-  List<String> directions =["Loading directions..."];
+  List<String> directions =["Your current location and destination are both super close to Nobel Commons, try looking around!"];
 
   bool displayLocInfoScreen = false;
   int whichSearch = 1;
@@ -181,10 +177,10 @@ Widget buildTypeWriter(String text){
 
   return IgnorePointer(child:  AnimatedTextKit(
       animatedTexts: [
-        TypewriterAnimatedText(
+        ScaleAnimatedText(
             text,
             textStyle: typerStyle,
-            speed: const Duration(milliseconds: 150),
+            duration: const Duration(milliseconds: 1000),
             textAlign: TextAlign.center
         ),
       ],
